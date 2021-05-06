@@ -5,13 +5,13 @@ import { useStore } from '../../../app/stores/store';
 
 export default observer(function ActivityList() {
     const { activityStore } = useStore();
-    const { activities, deleteActivity, loading, selectActivity } = activityStore;
+    const { activitiesByDate: activities, deleteActivity, loading, selectActivity } = activityStore;
 
     const [target, SetTarget] = useState('');
 
     function handleActivityDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         SetTarget(e.currentTarget.name);
-        deleteActivity(id);        
+        deleteActivity(id);
     }
 
     return (
