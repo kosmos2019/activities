@@ -13,8 +13,6 @@ import NotFound from '../../features/errors/NotFound';
 import { ToastContainer } from 'react-toastify';
 import ServerError from '../../features/errors/ServerError';
 import { useStore } from '../stores/store';
-import CommonStore from "../stores/commonStore";
-import UserStore from "../stores/userStore";
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 

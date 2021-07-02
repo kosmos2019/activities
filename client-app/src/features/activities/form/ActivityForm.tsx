@@ -13,23 +13,15 @@ import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import MyDateInput from '../../../app/common/form/MyDateInput';
 import { CategoryOptions } from '../../../app/common/options/categoryOptions';
-import { Activity } from '../../../app/models/activity';
+import { ActivityFormValues } from '../../../app/models/activity';
 
 export default observer(function ActivityFrom() {
     let history = useHistory();
     const { activityStore } = useStore();
-    const { loadingInitial, createActivity, updateActivity, loading, loadActivity } = activityStore;
+    const { loadingInitial, createActivity, updateActivity, loadActivity } = activityStore;
     const { id } = useParams<{ id: string }>();
 
-    const [activity, SetActivity] = useState<Activity>({
-        id: '',
-        title: '',
-        description: '',
-        category: '',
-        date: null,
-        city: '',
-        venue: ''
-    });
+    const [activity, SetActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema = Yup.object({
         title: Yup.string().required('The activity title is required'),
@@ -41,11 +33,11 @@ export default observer(function ActivityFrom() {
     });
 
     useEffect(() => {
-        if (id) loadActivity(id).then(activity => SetActivity(activity!));
+        if (id) loadActivity(id).then(activity => SetActivity(new ActivityFormValues(activity!)));
     }, [id, loadActivity]);
 
-    function handleFormSubmit(activity: Activity) {
-        if (activity.id.length === 0) {
+    function handleFormSubmit(activity: ActivityFormValues) {
+        if (!activity.id) {
             let newActivity = {
                 ...activity,
                 id: uuid()
@@ -55,11 +47,6 @@ export default observer(function ActivityFrom() {
             updateActivity(activity).then(() => history.push(`/activities/${activity.id}`));
         }
     }
-
-    // function handleChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    //     const { name, value } = event.target;
-    //     SetActivity({ ...activity, [name]: value });
-    // }
 
     if (loadingInitial) return <LoadingComponent content='Loading activity...' />
 
@@ -88,7 +75,7 @@ export default observer(function ActivityFrom() {
                         <MyTextInput placeholder='Venue' name='venue' />
                         <Button
                             disabled={isSubmitting || !isValid || !dirty}
-                            loading={loading} floated='right'
+                            loading={isSubmitting} floated='right'
                             positive type='submit' content='Submit'
                         />
                         <Button as={Link} to='/activities' floated='right' type='button' content='Cancel' />
