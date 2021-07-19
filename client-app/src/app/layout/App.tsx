@@ -7,6 +7,7 @@ import HomePage from '../../features/home/HomePage';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
+import ProfilePage from '../../features/profiles/ProfilePage';
 import LoginForm from '../../features/users/LoginForm';
 import TestErrors from '../../features/errors/TestErrors';
 import NotFound from '../../features/errors/NotFound';
@@ -45,6 +46,7 @@ function App() {
                 <Route path='/activities' exact component={ActivityDashboard} />
                 <Route path='/activities/:id' component={ActivityDetails} />
                 <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+                <Route path='/profiles/:username' component={ProfilePage} />
                 <Route path='/errors' component={TestErrors} />
                 <Route path='/server-error' component={ServerError} />
                 <Route path='/login' component={LoginForm} />
