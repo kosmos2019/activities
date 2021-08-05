@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
@@ -22,8 +23,10 @@ namespace Application.Activities
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IMapper mapper)
+            public readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _context = context;
             }
@@ -35,7 +38,8 @@ namespace Application.Activities
                 //if (activity == null) throw new Exception("Activity not found");
 
                 ActivityDto activity = await _context.Activities
-                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                        new { currentUserName = _userAccessor.GetUsername() })
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 return (activity != null) ? Result<ActivityDto>.Success(activity) :
