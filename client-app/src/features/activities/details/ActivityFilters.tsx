@@ -3,7 +3,6 @@ import { Header, Menu } from 'semantic-ui-react'
 import React from 'react'
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
-import { date } from 'yup/lib/locale';
 
 export default observer(function ActivityFilters() {
     const { activityStore: { predicate, setPredicate } } = useStore();

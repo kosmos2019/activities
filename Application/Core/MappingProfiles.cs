@@ -1,6 +1,7 @@
 using System.Linq;
 using Application.Activities;
 using Application.Comments;
+using Profiles = Application.Profiles;
 using AutoMapper;
 using Domain;
 
@@ -33,6 +34,15 @@ namespace Application.Core
                 .ForMember(c => c.UserName, o => o.MapFrom(u => u.Author.UserName))
                 .ForMember(c => c.DisplayName, o => o.MapFrom(u => u.Author.DisplayName))
                 .ForMember(c => c.Image, o => o.MapFrom(u => u.Author.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<Activity, Profiles.UserActivityDto>()
+                .ForMember(c => c.HostUserName, d => d.MapFrom(c => c.Attendees.FirstOrDefault(u => u.IsHost).AppUser.UserName));
+            CreateMap<ActivityAttendee, Profiles.UserActivityDto>()
+                .ForMember(c => c.Id, o => o.MapFrom(a => a.ActivityId))
+                .ForMember(c => c.Title, o => o.MapFrom(a => a.Activity.Title))
+                .ForMember(c => c.Category, o => o.MapFrom(a => a.Activity.Category))
+                .ForMember(c => c.Date, o => o.MapFrom(a => a.Activity.Date))
+                .ForMember(c => c.HostUserName, o => o.MapFrom(c =>
+                    c.Activity.Attendees.FirstOrDefault(u => u.IsHost).AppUser.UserName));
         }
     }
 }
