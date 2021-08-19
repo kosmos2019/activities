@@ -8,7 +8,6 @@ import ActivityDashboard from '../../features/activities/dashboard/ActivityDashb
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import ProfilePage from '../../features/profiles/ProfilePage';
-import LoginForm from '../../features/users/LoginForm';
 import TestErrors from '../../features/errors/TestErrors';
 import NotFound from '../../features/errors/NotFound';
 import { ToastContainer } from 'react-toastify';
@@ -16,6 +15,7 @@ import ServerError from '../../features/errors/ServerError';
 import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
+import PrivateRoute from '../layout/PrivateRoute';
 
 function App() {
   const location = useLocation();
@@ -43,13 +43,12 @@ function App() {
             <NavBar />
             <Container style={{ marginTop: '7em' }}>
               <Switch>
-                <Route path='/activities' exact component={ActivityDashboard} />
-                <Route path='/activities/:id' component={ActivityDetails} />
-                <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
-                <Route path='/profiles/:username' component={ProfilePage} />
-                <Route path='/errors' component={TestErrors} />
+                <PrivateRoute path='/activities' exact component={ActivityDashboard} />
+                <PrivateRoute path='/activities/:id' component={ActivityDetails} />
+                <PrivateRoute key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+                <PrivateRoute path='/profiles/:username' component={ProfilePage} />
+                <PrivateRoute path='/errors' component={TestErrors} />
                 <Route path='/server-error' component={ServerError} />
-                <Route path='/login' component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
