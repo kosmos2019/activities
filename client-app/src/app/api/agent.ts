@@ -27,8 +27,6 @@ axios.interceptors.response.use(async response => {
     const pagination = response.headers['pagination'];
 
     if (pagination) {
-        console.log('Pagination exist');
-
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
         return response as AxiosResponse<PaginatedResult<any>>;
     }

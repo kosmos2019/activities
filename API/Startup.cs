@@ -45,11 +45,34 @@ namespace API
         {
             app.UseMiddleware<ExceptionMiddleware>();
 
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opt => opt.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(opt => opt.Deny());
+            // For report errors and warnings using UseCspReportOnly
+            app.UseCsp(opt => opt
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
+                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
+                .ScriptSources(s => s.Self().CustomSources("sha256-xJVEnKDrWAtgD7VsoNVaDYPpG1UyUbOxU1YYIGw4eDk="))
+                .FormActions(s => s.Self())
+                .FrameAncestors(s => s.Self())
+            );
+
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+            }
+            else
+            {
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+                    await next.Invoke();
+                });
             }
 
             //app.UseHttpsRedirection();
