@@ -119,7 +119,7 @@ namespace API.Controllers
 
             if (!verifyToken.IsSuccessStatusCode) return Unauthorized();
 
-            var fbUrl = $"me?access_token={accessToken}&fields=name,email,picure.width(100).height(100)";
+            var fbUrl = $"me?access_token={accessToken}&fields=name,email,picture.width(100).height(100)";
             var response = await _httpClient.GetAsync(fbUrl);
 
             if (!response.IsSuccessStatusCode) return Unauthorized();
