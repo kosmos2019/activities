@@ -70,6 +70,7 @@ namespace API.Extensions
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
+                        .WithExposedHeaders("WWW-Authenticate")
                         .WithOrigins("http://localhost:3000");
                 });
             });
