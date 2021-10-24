@@ -42,6 +42,7 @@ export default class UserStore {
     getUser = async () => {
         try {
             const user = await agent.Account.current();
+            store.commonStore.setToken(user.token);
             runInAction(() => this.user = user);
             this.startRefreshTokenTimer(user);
         } catch (error) {
@@ -104,6 +105,7 @@ export default class UserStore {
     }
 
     refreshToken = async () => {
+        this.stopRefreshTokenTimer();
         try {
             const user = await agent.Account.refreshToken();
             runInAction(() => this.user = user);

@@ -50,7 +50,7 @@ namespace API
             app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
             app.UseXfo(opt => opt.Deny());
             // For report errors and warnings using UseCspReportOnly insted UseCsp
-            app.UseCspReportOnly(opt => opt
+            app.UseCsp(opt => opt
                 .BlockAllMixedContent()
                 .StyleSources(s => s.Self()
                     .CustomSources(
